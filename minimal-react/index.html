@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Pure React Samples</title>
+</head>
+
+<body>
+
+    <!-- Target container -->
+    <div id="react-container"></div>
+
+    <!-- React library & ReactDOM-->
+    <script src="https://unpkg.com/react@15.4.2/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15.4.2/dist/react-dom.js"></script>
+    <script>
+        const log = logger => msg => logger(msg)
+        const l = log(console.log)
+        const compose = (...fns) =>
+            arg =>
+                fns.reduce(
+                    (composed, f) => f(composed),
+                    arg
+                )
+        const getItems = () => [
+            "1 lb Salmon",
+            "1 cup Pine Nuts",
+            "2 cups Butter Lettuce",
+            "1 Yellow Squash",
+            "1/2 cup Olive Oil",
+            "3 cloves of Garlic"
+        ]
+        const getReactRoot = () => document.getElementById("react-container")
+        const makeLabel = title => React.createElement("h1", null, title)
+        const makeHardcoded = () => React.createElement(
+            "ul",
+            null,
+            React.createElement("li", null, "1 lb Salmon"),
+            React.createElement("li", null, "1 cup Pine Nuts"),
+            React.createElement("li", null, "2 cups Butter Lettuce"),
+            React.createElement("li", null, "1 Yellow Squash"),
+            React.createElement("li", null, "1/2 cup Olive Oil"),
+            React.createElement("li", null, "3 cloves of Garlic")
+        )
+        const makeWithProps = items => React.createElement(
+            "ul",
+            { className: "ingredients" },
+            items.map((ingredient, i) =>
+                React.createElement("li", { key: i }, ingredient)
+            )
+        )
+        const IngredientsListOldClass = React.createClass({
+            displayName: "IngredientsList",
+            myVar: "myVar",
+            render() {    
+                l(this.myVar)
+                return React.createElement("ul", { "className": "ingredients" },
+                    this.props.ingredients.map((val, idx) => this.renderItem(val, idx))
+                )
+            },
+            renderItem: (val, key) => React.createElement("li", {key}, val)
+        })
+        class IngredientsList extends React.Component {
+            constructor() {
+                super()
+                this.myVar = "myVar"
+            }
+            render() {
+                l(this.myVar)
+                return React.createElement("ul", { "className": "ingredients" },
+                    this.props.ingredients.map((val, idx) => this.renderItem(val, idx))
+                )
+            }
+            renderItem(val, key) {
+                return React.createElement("li", {key}, val)
+            }
+        }
+        const StatelessIngredientsList = ({ingredients}) => React.createElement("ul", { "className": "ingredients" }, ingredients.map((val, idx) => React.createElement("li", {key: idx}, val)))
+        const IngredientsListFactory = React.createFactory(StatelessIngredientsList)
+        
+        const ingredients = getItems()
+        const createMyElems = () => React.createElement("div", null,
+            makeLabel("hardcoded"),
+            makeHardcoded(),
+            makeLabel("with props"),
+            makeWithProps(ingredients),
+            makeLabel("using React.createClass"),
+            React.createElement(IngredientsListOldClass, {ingredients}),
+            makeLabel("using ES6 extends"),
+            React.createElement(IngredientsList, {ingredients}),
+            makeLabel("using stateless component"),
+            React.createElement(StatelessIngredientsList, {ingredients}),
+            makeLabel("using factory method"),
+            IngredientsListFactory({ingredients})
+        )
+        ReactDOM.render(createMyElems(), getReactRoot())
+    </script>
+</body>
+
+</html>
