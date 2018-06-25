@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Pure React Samples</title>
+</head>
+
+<body>
+
+    <!-- Target container -->
+    <div id="react-container"></div>
+
+    <!-- React library & ReactDOM-->
+    <script src="https://unpkg.com/react@15.4.2/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15.4.2/dist/react-dom.js"></script>
+    <!-- Babel required for JSX-->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.29/browser.js">
+    </script>
+
+    <script type="text/babel">
+        const log = logger => msg => logger(msg)
+        const l = log(console.log)
+        const getReactRoot = () => document.getElementById("react-container")
+        const getItems = () => [
+            "1 lb Salmon",
+            "1 cup Pine Nuts",
+            "2 cups Butter Lettuce",
+            "1 Yellow Squash",
+            "1/2 cup Olive Oil",
+            "3 cloves of Garlic"
+        ]
+        const ingredients = getItems()
+        const IngredientsList = ({ingredients}) => <ul className="ingredients">{ingredients.map((val, idx) => <li key={idx}>{val}</li>)}</ul>
+        ReactDOM.render(<IngredientsList ingredients={ingredients}/>, getReactRoot())
+    </script>
+</body>
+</html>
